@@ -1,9 +1,5 @@
 # **Finding Lane Lines on the Road** 
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
 ---
 
 **Finding Lane Lines on the Road**
@@ -15,7 +11,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
+[5-final]: ./examples/solidYellowLeft.jpg "solidYellowLeft.jpg - Final"
 
 ---
 
@@ -23,22 +19,20 @@ The goals / steps of this project are the following:
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+My pipeline consisted of 5 steps. First, I converted the images to grayscale and applied Gaussian filter with Kernel size of 5. Then I applied Canny Edge detector with thresholds 50 and 150. I then applied a region mask to use only the bottom part of the image. I applied Hough transform and some filtering to detect possible lane markings. Finally, I created a weighted image to overlay the lane lines on the original image.
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
+Here is the result of the pipeline applied to one of the sample images (solidYellowLeft.jpg).
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+![solidYellowLeft.jpg - Final][5-final]
 
-![alt text][image1]
-
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by first discarding all lines that have `slope = 0` or those that have the y-intercept less than the height of the image. Then the lines are categorized into those having positive or negative slopes to represent either sides of the lanes. I then computed the average value of the lower-most and upper-most points of each lanes. Using the averages, I computed the average slope and average y intercept, and construct the line. For the videos, I applied median filtering over a window size of last 15 frames to avoid the lines from jumping abruptly.
 
 ### 2. Identify potential shortcomings with your current pipeline
 
 
-One potential shortcoming would be what would happen when ... 
+One potential shortcoming that is also seen when the pipeline is applied to the challenge image is when there is a ramp along the edge of the road. This could be wrongly identified as the lane or the coordinates would skew the real lane markings.
 
-Another shortcoming could be ...
-
+Another shortcoming could be that the lane detection would be a bit slow to adapt to sharp turns due to filtering.
 
 ### 3. Suggest possible improvements to your pipeline
 
