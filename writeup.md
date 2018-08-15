@@ -25,16 +25,18 @@ Here is the result of the pipeline applied to one of the sample images (solidYel
 
 ![solidYellowLeft.jpg - Final][5-final]
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by first discarding all lines that have `slope = 0` or those that have the y-intercept less than the height of the image. Then the lines are categorized into those having positive or negative slopes to represent either sides of the lanes. I then computed the average value of the lower-most and upper-most points of each lanes. Using the averages, I computed the average slope and average y intercept, and construct the line. For the videos, I applied median filtering over a window size of last 15 frames to avoid the lines from jumping abruptly.
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by first discarding all lines that have `slope = 0` or those that have the y-intercept less than the height of the image, eg. in case of barriers along lane markings. Then the lines are categorized into those having positive or negative slopes to represent either sides of the lanes. I then computed the average value of the lower-most and upper-most points for both lanes. I store these averages in a moving window of last 20 frames, and take the median for slope and y-intercept to draw the final lines. Due to median filtering, the lines don't jump abruptly. If a lane marking is not detected in a frame, I discard the oldest entry in my moving window so that the values are from last 20 frames.
 
 ### 2. Identify potential shortcomings with your current pipeline
 
 
-One potential shortcoming that is also seen when the pipeline is applied to the challenge image is when there is a ramp along the edge of the road. This could be wrongly identified as the lane or the coordinates would skew the real lane markings. This behavior could also be observed when there are temporary (yellow markings in EU roads) lane markings on the road due to construction work. These temporary lane markings should take precedence over the permanent (white markings in EU roads) markings.
+One potential shortcoming that is also seen when the pipeline is applied to the challenge image is when there is a ramp along the edge of the road. This could be wrongly identified as the lane or the coordinates would skew the real lane markings. I have mitigated this to some extent by discarding lines based on the slope and y-intercept, but this is not so robust. This behavior could also be observed in real world when there are temporary (yellow markings in EU roads) lane markings on the road due to construction work. These temporary lane markings should take precedence over the permanent (white markings in EU roads) markings.
 
-Another shortcoming could be that the lane detection would be a bit slow to adapt to sharp turns due to filtering.
+Another shortcoming could be that the lane detection would be a bit slow to adapt to sharp turns due to median filtering.
 
 My pipeline expects that the vehicle starts already within two lane markings. This might not always be the case, eg. when it is driving out of a driveway to the road.
+
+Furthermore, as it can be observed from the challenge video, the pipeline is not robuts to changing lighting condition.
 
 ### 3. Suggest possible improvements to your pipeline
 
