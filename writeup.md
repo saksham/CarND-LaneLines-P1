@@ -32,15 +32,14 @@ In order to draw a single line on the left and right lanes, I modified the draw_
 
 One potential shortcoming that is also seen when the pipeline is applied to the challenge image is when there is a ramp along the edge of the road. This could be wrongly identified as the lane or the coordinates would skew the real lane markings. I have mitigated this to some extent by discarding lines based on the slope and y-intercept, but this is not so robust. This behavior could also be observed in real world when there are temporary (yellow markings in EU roads) lane markings on the road due to construction work. These temporary lane markings should take precedence over the permanent (white markings in EU roads) markings.
 
-Another shortcoming could be that the lane detection would be a bit slow to adapt to sharp turns due to median filtering.
 
-My pipeline expects that the vehicle starts already within two lane markings. This might not always be the case, eg. when it is driving out of a driveway to the road.
+Another shortcoming could be that the lane detection would be a bit slow to adapt to sharp turns due to median filtering.
 
 Furthermore, as it can be observed from the challenge video, the pipeline is not robuts to changing lighting condition.
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to use clustering algorigthm to see if there are indeed more than one line detected, one of which could be a ramp or a temporary marking. Then, based on the expected distance between the lanes or some other paramter, the correct edge could be considered.
+A possible improvement would be to use clustering algorigthm to see if there are indeed more than one line detected, one of which could be a ramp or a temporary marking. Then, based on the expected distance between the lanes or some other paramter, the correct edge could be considered. Also, as we are binning the line segments based solely on their slope. This does not work well for tight turns. Clustering could help here as well.
 
 Another potential improvement could be to use regression instead of averaging the points detected by Hough transform. Using a higher order polynomial function for regression, we could even account for curved paths.
 
